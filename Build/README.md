@@ -8,6 +8,11 @@ Prerequisites
 ==
 Before you you can use CMake, make sure the git submodules are initialized. In the parent directory, run `git submodule init` and `git submodule update` to have the submodules initialized.
 
+DirectX SDK (Windows only)
+===
+
+To build for windows, the [DirectX SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812 ) must be installed on the local machine.
+
 Install CMake
 ==
 
