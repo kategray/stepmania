@@ -2,6 +2,13 @@
 #include "DirectXHelpers.h"
 #include "RageUtil.h"
 
+// Compatibilities for windows 10 sdk
+#include <ntverp.h>
+#if VER_PRODUCTBUILD > 9600
+// Needed for compatibility with DXERR
+#pragma comment(lib, "legacy_stdio_definitions.lib")
+#endif
+
 #include <windows.h>
 #if defined(USE_DXERR9)
 #include <dxerr9.h>
