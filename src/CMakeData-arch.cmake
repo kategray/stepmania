@@ -278,6 +278,13 @@ list(APPEND SMDATA_ARCH_LIGHTS_HPP
   "arch/Lights/LightsDriver_SextetStream.h"
 )
 
+list(APPEND SMDATA_ARCH_LIGHTS_SRC
+  "arch/Lights/LightsDriver_XBee.cpp"
+)
+list(APPEND SMDATA_ARCH_LIGHTS_HPP
+  "arch/Lights/LightsDriver_XBee.h"
+)
+
 # TODO: Confirm if Apple can use the export.
 if(NOT APPLE)
   list(APPEND SMDATA_ARCH_LIGHTS_SRC
