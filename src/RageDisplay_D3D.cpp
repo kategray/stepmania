@@ -18,7 +18,6 @@
 #include "LocalizedString.h"
 
 #include <d3d9.h>
-#include <dxerr.h>
 #pragma comment(lib, "legacy_stdio_definitions.lib")
 
 #include "archutils/Win32/GraphicsWindow.h"
