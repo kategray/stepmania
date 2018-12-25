@@ -4,7 +4,6 @@
 #include "RageUtil.h"
 #include "RageLog.h"
 #include "PlayerOptions.h"
-#include "PrefsManager.h"
 #include "Song.h"
 #include "Style.h"
 #include "GameState.h"
@@ -762,33 +761,16 @@ void LightTransformHelper( const NoteData &in, NoteData &out, const vector<int> 
 // For every track enabled in "in", enable all tracks in "out".
 void NoteDataUtil::LoadTransformedLights( const NoteData &in, NoteData &out, int iNewNumTracks )
 {
-	if (PREFSMAN->m_bOITGStyleLights)
-	{
-		NoteData bass;
-		bass.Init();
+	// reset all notes
+	out.Init();
 
-		// copy from the marquee data, but slim down the notes.
-		// this makes it look more bass-ish and less like the original chart.
-		bass.CopyAll(in);
-		RemoveHoldNotes(bass);
-		Little(bass);
+	out.SetNumTracks( iNewNumTracks );
 
-		LoadTransformedLightsFromTwo(in, bass, out);
-	}
-	else
-	{
-	
-		// reset all notes
-		out.Init();
+	vector<int> aiTracks;
+	for( int i = 0; i < out.GetNumTracks(); ++i )
+		aiTracks.push_back( i );
 
-		out.SetNumTracks( iNewNumTracks );
-
-		vector<int> aiTracks;
-		for( int i = 0; i < out.GetNumTracks(); ++i )
-			aiTracks.push_back( i );
-
-		LightTransformHelper( in, out, aiTracks );
-	}
+	LightTransformHelper( in, out, aiTracks );
 }
 
 // This transform is specific to StepsType_lights_cabinet.

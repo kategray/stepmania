@@ -287,7 +287,6 @@ PrefsManager::PrefsManager() :
 	m_iSoundWriteAhead		( "SoundWriteAhead",			0 ),
 	m_iSoundDevice			( "SoundDevice",			"" ),
 	m_iSoundPreferredSampleRate	( "SoundPreferredSampleRate",		0 ),
-	m_bOITGStyleLights		("OITGStyleLights", false),
 	m_sLightsStepsDifficulty	( "LightsStepsDifficulty",		"medium" ),
 	m_bAllowUnacceleratedRenderer	( "AllowUnacceleratedRenderer",		false ),
 	m_bThreadedInput		( "ThreadedInput",			true ),
