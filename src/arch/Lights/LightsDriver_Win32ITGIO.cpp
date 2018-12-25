@@ -3,6 +3,8 @@
 #include "windows.h"
 #include "RageLog.h"
 #include "RageUtil.h"
+#include "ScreenManager.h"
+#include <iomanip>
 
 /*
  * StepMania 5 ITGIO Driver (using HIDAPI.dll)
@@ -73,10 +75,7 @@ LightsDriver_Win32ITGIO::~LightsDriver_Win32ITGIO()
 void LightsDriver_Win32ITGIO::Set( const LightsState *ls )
 {
 	uint8_t hidapi_report[ITGIO_REPORT_LENGTH + ITGIO_REPORT_ID_LENGTH];
-
-	if (TRUE != itgio_initialized) {
-		return;
-	}
+	uint8_t last_report[ITGIO_REPORT_LENGTH + ITGIO_REPORT_ID_LENGTH];
 
 	// Initialize the report to all zeroes
 	memset(hidapi_report, 0u, sizeof(hidapi_report));
@@ -87,29 +86,32 @@ void LightsDriver_Win32ITGIO::Set( const LightsState *ls )
 	/*
 	 * Build the Report
 	 */
-	// Cabinet lights
+	 // Player Lights
+	if (ls->m_bGameButtonLights[GameController_1][DANCE_BUTTON_UP]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P1_UP; }
+	if (ls->m_bGameButtonLights[GameController_1][DANCE_BUTTON_DOWN]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P1_DOWN; }
+	if (ls->m_bGameButtonLights[GameController_1][DANCE_BUTTON_LEFT]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P1_LEFT; }
+	if (ls->m_bGameButtonLights[GameController_1][DANCE_BUTTON_RIGHT]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P1_RIGHT; }
+	if (ls->m_bGameButtonLights[GameController_2][DANCE_BUTTON_UP]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P2_UP; }
+	if (ls->m_bGameButtonLights[GameController_2][DANCE_BUTTON_DOWN]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P2_DOWN; }
+	if (ls->m_bGameButtonLights[GameController_2][DANCE_BUTTON_LEFT]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P2_LEFT; }
+	if (ls->m_bGameButtonLights[GameController_2][DANCE_BUTTON_RIGHT]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P2_RIGHT; }
+
+    // Cabinet lights
 	if (ls->m_bCabinetLights[LIGHT_MARQUEE_UP_LEFT])  { hidapi_report[ITGIO_LIGHT_PORT_1] |= ITGIO_LIGHT_MARQUEE_UP_LEFT; }
 	if (ls->m_bCabinetLights[LIGHT_MARQUEE_UP_RIGHT]) { hidapi_report[ITGIO_LIGHT_PORT_1] |= ITGIO_LIGHT_MARQUEE_UP_RIGHT; }
 	if (ls->m_bCabinetLights[LIGHT_MARQUEE_LR_LEFT])  { hidapi_report[ITGIO_LIGHT_PORT_1] |= ITGIO_LIGHT_MARQUEE_LR_LEFT; }
 	if (ls->m_bCabinetLights[LIGHT_MARQUEE_LR_RIGHT]) { hidapi_report[ITGIO_LIGHT_PORT_1] |= ITGIO_LIGHT_MARQUEE_LR_RIGHT; }
 	if (ls->m_bCabinetLights[LIGHT_BASS_LEFT] || ls->m_bCabinetLights[LIGHT_BASS_RIGHT]) {hidapi_report[ITGIO_LIGHT_PORT_1] |= ITGIO_LIGHT_SUB;}
+	if (ls->m_bCoinCounter) { hidapi_report[ITGIO_LIGHT_PORT_1] |= ITGIO_LIGHT_COIN; }
 	if (ls->m_bGameButtonLights[GameController_1][GAME_BUTTON_START]) { hidapi_report[ITGIO_LIGHT_PORT_1] |= ITGIO_LIGHT_CAB_P1; }
 	if (ls->m_bGameButtonLights[GameController_2][GAME_BUTTON_START]) { hidapi_report[ITGIO_LIGHT_PORT_1] |= ITGIO_LIGHT_CAB_P2; }
 
-	// Player Lights
-	if (ls->m_bGameButtonLights[GameController_1][GAME_BUTTON_UP])    { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P1_UP; }
-	if (ls->m_bGameButtonLights[GameController_1][GAME_BUTTON_DOWN])  { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P1_DOWN; }
-	if (ls->m_bGameButtonLights[GameController_1][GAME_BUTTON_LEFT])  { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P1_LEFT; }
-	if (ls->m_bGameButtonLights[GameController_1][GAME_BUTTON_RIGHT]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P1_RIGHT; }
-	if (ls->m_bGameButtonLights[GameController_2][GAME_BUTTON_UP])    { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P2_UP; }
-	if (ls->m_bGameButtonLights[GameController_2][GAME_BUTTON_DOWN])  { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P2_DOWN; }
-	if (ls->m_bGameButtonLights[GameController_2][GAME_BUTTON_LEFT])  { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P2_LEFT; }
-	if (ls->m_bGameButtonLights[GameController_2][GAME_BUTTON_RIGHT]) { hidapi_report[ITGIO_LIGHT_PORT_0] |= ITGIO_LIGHT_P2_RIGHT; }
-
-	/*
-	 * Write the Report
-	 */
-	hid_write(ITGIO, hidapi_report, sizeof(hidapi_report));
+	if (TRUE == itgio_initialized) {
+		/*
+		* Write the Report
+		*/
+		hid_write(ITGIO, hidapi_report, sizeof(hidapi_report));
+	}
 }
 #endif
 
