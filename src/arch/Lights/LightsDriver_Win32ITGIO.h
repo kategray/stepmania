@@ -11,14 +11,19 @@
 /*
  * Constants
  */
+#ifndef ITGIO_VENDOR
 #define ITGIO_VENDOR  0x07C0
+#endif
+
+#ifndef ITGIO_PRODUCT
 #define ITGIO_PRODUCT 0x1584
+#endif
 
 // Used for report byte addressing
 #define ITGIO_REPORT_ID_POS 0u
 
 #define ITGIO_REPORT_ID 0u
-#define ITGIO_REPORT_LENGTH 5u
+#define ITGIO_REPORT_LENGTH 4u
 #define ITGIO_REPORT_ID_LENGTH 1u
 
 // First Port

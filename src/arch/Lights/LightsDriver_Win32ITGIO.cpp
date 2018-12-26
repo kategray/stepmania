@@ -75,7 +75,7 @@ LightsDriver_Win32ITGIO::~LightsDriver_Win32ITGIO()
 void LightsDriver_Win32ITGIO::Set( const LightsState *ls )
 {
 	uint8_t hidapi_report[ITGIO_REPORT_LENGTH + ITGIO_REPORT_ID_LENGTH];
-	uint8_t last_report[ITGIO_REPORT_LENGTH + ITGIO_REPORT_ID_LENGTH];
+	static uint8_t last_report[ITGIO_REPORT_LENGTH + ITGIO_REPORT_ID_LENGTH];
 
 	// Initialize the report to all zeroes
 	memset(hidapi_report, 0u, sizeof(hidapi_report));
@@ -108,9 +108,12 @@ void LightsDriver_Win32ITGIO::Set( const LightsState *ls )
 
 	if (TRUE == itgio_initialized) {
 		/*
-		* Write the Report
+		* Write the Report, avoiding duplicates
 		*/
-		hid_write(ITGIO, hidapi_report, sizeof(hidapi_report));
+		if (0 != memcmp(hidapi_report, last_report, sizeof(hidapi_report))) {
+			hid_write(ITGIO, hidapi_report, sizeof(hidapi_report));
+			memcpy(last_report, hidapi_report, sizeof(hidapi_report));
+		}
 	}
 }
 #endif
