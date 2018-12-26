@@ -55,6 +55,7 @@ LightsDriver_Win32ITGIO::LightsDriver_Win32ITGIO()
 			itgio_initialized = TRUE;
 #ifdef ITGIO_DEBUG
 			LOG->Info("ITGIO: Connected to device.");
+#endif
 		}
 	}
 }
