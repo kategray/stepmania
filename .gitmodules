@@ -1,0 +1,6 @@
+[submodule "extern/hidapi"]
+	path = extern/hidapi
+	url = https://github.com/signal11/hidapi.git
+[submodule "extern/stepmaniax-sdk"]
+	path = extern/stepmaniax-sdk
+	url = https://github.com/steprevolution/stepmaniax-sdk.git
